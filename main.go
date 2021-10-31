@@ -3,13 +3,13 @@ package main
 import (
 	"os"
 
-	"github.com/matriphe/github-stats/pkg/output"
-
+	"github.com/jedib0t/go-pretty/v6/table"
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 
 	"github.com/matriphe/github-stats/pkg/calculator"
 	"github.com/matriphe/github-stats/pkg/command"
+	"github.com/matriphe/github-stats/pkg/output"
 	"github.com/matriphe/github-stats/pkg/repository"
 )
 
@@ -65,8 +65,8 @@ func main() {
 						return err
 					}
 
-					w := output.NewPullRequestOutput(c.App.Usage, result)
-					w.ShowTitle()
+					w := output.NewPullRequestOutput(table.NewWriter(), result)
+					w.ShowTitle(c.App.Usage)
 					w.ShowPullRequests()
 
 					return nil
