@@ -34,28 +34,26 @@ func NewPullRequestOutput(
 }
 
 func (s *prOutput) ShowTitle() {
-	t := table.NewWriter()
-	t.SetTitle(s.title)
-	t.AppendRow(table.Row{"User", s.result.User.GetLogin()})
+	s.t.SetTitle(s.title)
+	s.t.AppendRow(table.Row{"User", s.result.User.GetLogin()})
 
 	if s.result.Query.Org != "" {
-		t.AppendRow(table.Row{"Organization", s.result.Query.Org})
+		s.t.AppendRow(table.Row{"Organization", s.result.Query.Org})
 	}
 	if s.result.Query.State != "" {
-		t.AppendRow(table.Row{"State", s.result.Query.State})
+		s.t.AppendRow(table.Row{"State", s.result.Query.State})
 	}
 	if s.result.Query.StartDate != "" {
-		t.AppendRow(table.Row{"From Date", s.result.Query.StartDate})
+		s.t.AppendRow(table.Row{"From Date", s.result.Query.StartDate})
 	}
 
-	fmt.Println(t.Render())
+	fmt.Println(s.t.Render())
 }
 
 func (s *prOutput) ShowPullRequests() {
-	t := table.NewWriter()
-	t.Style().Options.SeparateRows = true
-	t.AppendHeader(table.Row{"#", "Pull Request", "Files", "Additions", "Deletions", "Changes", "Total"})
-	t.SetColumnConfigs([]table.ColumnConfig{
+	s.t.Style().Options.SeparateRows = true
+	s.t.AppendHeader(table.Row{"#", "Pull Request", "Files", "Additions", "Deletions", "Changes", "Total"})
+	s.t.SetColumnConfigs([]table.ColumnConfig{
 		{Number: 1, Align: text.AlignRight},
 		{Number: 2, Align: text.AlignLeft},
 		{Number: 3, Align: text.AlignRight},
@@ -66,7 +64,7 @@ func (s *prOutput) ShowPullRequests() {
 	})
 	i := 1
 	for _, pr := range s.result.PullRequests {
-		t.AppendRow(table.Row{
+		s.t.AppendRow(table.Row{
 			fmt.Sprintf("%d", i),
 			text.WrapSoft(pr.Issue.GetTitle(), 50),
 			fmt.Sprintf("%d", pr.Stats.NumFiles),
@@ -77,7 +75,7 @@ func (s *prOutput) ShowPullRequests() {
 		})
 		i++
 	}
-	t.AppendFooter(table.Row{
+	s.t.AppendFooter(table.Row{
 		"",
 		"Average",
 		fmt.Sprintf("%d", s.result.Statistics.Avg.Files),
@@ -87,5 +85,5 @@ func (s *prOutput) ShowPullRequests() {
 		fmt.Sprintf("%d", s.result.Statistics.Avg.Total),
 	})
 
-	fmt.Println(t.Render())
+	fmt.Println(s.t.Render())
 }
