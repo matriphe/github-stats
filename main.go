@@ -65,8 +65,8 @@ func main() {
 						return err
 					}
 
-					w := output.NewPullRequestOutput(table.NewWriter(), c.App.Usage, result)
-					w.ShowTitle()
+					w := output.NewPullRequestOutput(table.NewWriter(), result)
+					w.ShowTitle(c.App.Usage)
 					w.ShowPullRequests()
 
 					return nil

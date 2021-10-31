@@ -5,36 +5,34 @@ import (
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
+
 	"github.com/matriphe/github-stats/pkg/command"
 )
 
 type (
 	prOutput struct {
 		t      table.Writer
-		title  string
 		result command.PullRequestCommandResult
 	}
 
 	PullRequestOutput interface {
-		ShowTitle()
+		ShowTitle(title string)
 		ShowPullRequests()
 	}
 )
 
 func NewPullRequestOutput(
 	t table.Writer,
-	title string,
 	r command.PullRequestCommandResult,
 ) PullRequestOutput {
 	return &prOutput{
 		t:      t,
-		title:  title,
 		result: r,
 	}
 }
 
-func (s *prOutput) ShowTitle() {
-	s.t.SetTitle(s.title)
+func (s *prOutput) ShowTitle(title string) {
+	s.t.SetTitle(title)
 	s.t.AppendRow(table.Row{"User", s.result.User.GetLogin()})
 
 	if s.result.Query.Org != "" {
