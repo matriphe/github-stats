@@ -14,20 +14,24 @@ type (
 		Total     int
 	}
 
+	// PullRequestCalc holds pull request calculator result.
 	PullRequestCalc struct {
 		Num int
 		Avg prAvg
 	}
 
+	// PullRequestCalculator is an interface for pull request calculator.
 	PullRequestCalculator interface {
 		GetAverage([]repository.PullRequests) PullRequestCalc
 	}
 )
 
+// NewPullRequestCalculator creates pull request calculator.
 func NewPullRequestCalculator() PullRequestCalculator {
 	return &prCalc{}
 }
 
+// GetAverage returns pull request average.
 func (c *prCalc) GetAverage(prs []repository.PullRequests) PullRequestCalc {
 	r := PullRequestCalc{Num: len(prs)}
 	if r.Num == 0 {
