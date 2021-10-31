@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/matriphe/github-stats/pkg/client"
 	"os"
+
+	"github.com/matriphe/github-stats/pkg/client"
 
 	"github.com/jedib0t/go-pretty/v6/table"
 	log "github.com/sirupsen/logrus"
@@ -47,12 +48,12 @@ func main() {
 				},
 				Action: func(c *cli.Context) error {
 					ctx := c.Context
+					token := c.String("token")
 
-					ghAuthClient := client.NewAuthClient(ctx)
-					ghClient := ghAuthClient.Client(c.String("token"))
+					ghAuthClient := client.NewGitHubAuthClient(ctx, token)
 
-					userRepo := repository.NewUserRepo(ctx, ghClient)
-					prRepo := repository.NewPullRequestRepo(ctx, ghClient, perPage)
+					userRepo := repository.NewUserRepo(ctx, ghAuthClient)
+					prRepo := repository.NewPullRequestRepo(ctx, ghAuthClient, perPage)
 					query := repository.PullRequestQuery{
 						Org:       c.String("org"),
 						State:     c.String("state"),
