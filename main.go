@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/matriphe/github-stats/pkg/client"
 	"os"
 
 	"github.com/jedib0t/go-pretty/v6/table"
@@ -47,7 +48,7 @@ func main() {
 				Action: func(c *cli.Context) error {
 					ctx := c.Context
 
-					ghAuthClient := repository.NewAuthClient(ctx)
+					ghAuthClient := client.NewAuthClient(ctx)
 					ghClient := ghAuthClient.Client(c.String("token"))
 
 					userRepo := repository.NewUserRepo(ctx, ghClient)
