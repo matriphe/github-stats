@@ -1,6 +1,6 @@
 module github.com/matriphe/github-stats
 
-go 1.16
+go 1.17
 
 require (
 	github.com/google/go-github/v35 v35.3.0
