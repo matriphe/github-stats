@@ -6,7 +6,8 @@ type (
 	prCalc struct {
 	}
 
-	prAvg struct {
+	// PrAvg holds the pull request average.
+	PrAvg struct {
 		Files     int
 		Additions int
 		Deletions int
@@ -17,7 +18,7 @@ type (
 	// PullRequestCalc holds pull request calculator result.
 	PullRequestCalc struct {
 		Num int
-		Avg prAvg
+		Avg PrAvg
 	}
 
 	// PullRequestCalculator is an interface for pull request calculator.
@@ -52,7 +53,7 @@ func (c *prCalc) GetAverage(prs []repository.PullRequests) PullRequestCalc {
 		files += pr.Stats.NumFiles
 	}
 
-	r.Avg = prAvg{
+	r.Avg = PrAvg{
 		Files:     files / r.Num,
 		Additions: additions / r.Num,
 		Deletions: deletions / r.Num,
