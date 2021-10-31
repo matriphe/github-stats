@@ -12,11 +12,13 @@ type (
 		gc  *github.Client
 	}
 
+	// UserRepo is an interface for GitHub user repository.
 	UserRepo interface {
 		User() (*github.User, error)
 	}
 )
 
+// NewUserRepo creates new GitHub user repository.
 func NewUserRepo(ctx context.Context, gh *github.Client) UserRepo {
 	return &userRepo{
 		ctx: ctx,
@@ -24,7 +26,7 @@ func NewUserRepo(ctx context.Context, gh *github.Client) UserRepo {
 	}
 }
 
-// User returns Github user info.
+// User returns GitHub user info.
 func (r *userRepo) User() (*github.User, error) {
 	u, _, err := r.gc.Users.Get(r.ctx, "")
 	if err != nil {
