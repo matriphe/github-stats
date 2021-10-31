@@ -46,6 +46,8 @@ func (s *prOutput) ShowTitle(title string) {
 	}
 
 	fmt.Println(s.t.Render())
+
+	s.resetRender()
 }
 
 func (s *prOutput) ShowPullRequests() {
@@ -84,4 +86,12 @@ func (s *prOutput) ShowPullRequests() {
 	})
 
 	fmt.Println(s.t.Render())
+
+	s.resetRender()
+}
+
+func (s *prOutput) resetRender() {
+	s.t.ResetHeaders()
+	s.t.ResetRows()
+	s.t.ResetFooters()
 }
