@@ -16,5 +16,10 @@ type UserRepoMock struct {
 func (m *UserRepoMock) User() (*github.User, error) {
 	args := m.Called()
 
-	return args.Get(0).(*github.User), args.Error(1)
+	err := args.Error(1)
+	if err != nil {
+		return nil, err
+	}
+
+	return args.Get(0).(*github.User), err
 }

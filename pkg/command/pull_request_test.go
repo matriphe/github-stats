@@ -3,6 +3,7 @@
 package command
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/google/go-github/v35/github"
@@ -97,4 +98,26 @@ func TestPullRequestCommand_NoError(t *testing.T) {
 			assert.Equal(t, tc.expectedResult, result.Statistics)
 		})
 	}
+}
+
+func TestPullRequestCommand_UserRepoError(t *testing.T) {
+	userRepo := &repository.UserRepoMock{}
+	defer userRepo.AssertExpectations(t)
+
+	userRepo.On("User").
+		Once().
+		Return(nil, errors.New("something bad"))
+
+	prRepo := &repository.PullRequestRepoMock{}
+	defer prRepo.AssertExpectations(t)
+
+	prQuery := repository.PullRequestQuery{}
+
+	calc := calculator.NewPullRequestCalculator()
+
+	result, err := PullRequest(userRepo, prRepo, prQuery, calc)
+
+	require.Error(t, err)
+	assert.EqualError(t, err, "failed getting user info: something bad")
+	assert.Equal(t, PullRequestCommandResult{Query: prQuery}, result)
 }
