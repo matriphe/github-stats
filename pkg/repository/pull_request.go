@@ -21,6 +21,7 @@ type (
 		repo  string
 	}
 
+	// PullRequestQuery holds query for GitHub API.
 	PullRequestQuery struct {
 		Author    string
 		Org       string
@@ -28,6 +29,7 @@ type (
 		StartDate string
 	}
 
+	// Stats holds the results of pull requests stats.
 	Stats struct {
 		NumFiles  int
 		Additions int
@@ -36,17 +38,20 @@ type (
 		Total     int
 	}
 
+	// PullRequests holds the pull requests information.
 	PullRequests struct {
 		Issue *github.Issue
 		Files []*github.CommitFile
 		Stats Stats
 	}
 
+	// PullRequestRepo is an interface for GitHub pull request repository.
 	PullRequestRepo interface {
 		GetPullRequests(PullRequestQuery) ([]PullRequests, error)
 	}
 )
 
+// NewPullRequestRepo creates new PullRequest repository.
 func NewPullRequestRepo(
 	ctx context.Context,
 	client *github.Client,
@@ -59,6 +64,7 @@ func NewPullRequestRepo(
 	}
 }
 
+// GetPullRequests returns pull requests information.
 func (pr *prRepo) GetPullRequests(query PullRequestQuery) ([]PullRequests, error) {
 	q := pr.setQuery(query)
 
