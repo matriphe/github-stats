@@ -2,6 +2,7 @@ package output
 
 import (
 	"fmt"
+
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/jedib0t/go-pretty/v6/text"
 	"github.com/matriphe/github-stats/pkg/command"
@@ -9,6 +10,7 @@ import (
 
 type (
 	prOutput struct {
+		t      table.Writer
 		title  string
 		result command.PullRequestCommandResult
 	}
@@ -20,10 +22,12 @@ type (
 )
 
 func NewPullRequestOutput(
+	t table.Writer,
 	title string,
 	r command.PullRequestCommandResult,
 ) PullRequestOutput {
 	return &prOutput{
+		t:      t,
 		title:  title,
 		result: r,
 	}
