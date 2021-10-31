@@ -8,6 +8,7 @@ import (
 	"github.com/urfave/cli/v2"
 
 	"github.com/matriphe/github-stats/pkg/calculator"
+	"github.com/matriphe/github-stats/pkg/client"
 	"github.com/matriphe/github-stats/pkg/command"
 	"github.com/matriphe/github-stats/pkg/output"
 	"github.com/matriphe/github-stats/pkg/repository"
@@ -46,12 +47,12 @@ func main() {
 				},
 				Action: func(c *cli.Context) error {
 					ctx := c.Context
+					token := c.String("token")
 
-					ghAuthClient := repository.NewAuthClient(ctx)
-					ghClient := ghAuthClient.Client(c.String("token"))
+					ghAuthClient := client.NewGitHubAuthClient(ctx, token)
 
-					userRepo := repository.NewUserRepo(ctx, ghClient)
-					prRepo := repository.NewPullRequestRepo(ctx, ghClient, perPage)
+					userRepo := repository.NewUserRepo(ctx, ghAuthClient)
+					prRepo := repository.NewPullRequestRepo(ctx, ghAuthClient, perPage)
 					query := repository.PullRequestQuery{
 						Org:       c.String("org"),
 						State:     c.String("state"),
