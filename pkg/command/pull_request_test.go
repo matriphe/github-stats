@@ -121,3 +121,37 @@ func TestPullRequestCommand_UserRepoError(t *testing.T) {
 	assert.EqualError(t, err, "failed getting user info: something bad")
 	assert.Equal(t, PullRequestCommandResult{Query: prQuery}, result)
 }
+
+func TestPullRequestCommand_PullRequestRepoError(t *testing.T) {
+	userRepo := &repository.UserRepoMock{}
+	defer userRepo.AssertExpectations(t)
+
+	tester := "tester"
+	ghUser := &github.User{Login: &tester}
+
+	userRepo.On("User").
+		Once().
+		Return(ghUser, nil)
+
+	prRepo := &repository.PullRequestRepoMock{}
+	defer prRepo.AssertExpectations(t)
+
+	prQuery := repository.PullRequestQuery{}
+
+	prRepo.On("GetPullRequests", repository.PullRequestQuery{Author: tester}).
+		Once().
+		Return(nil, errors.New("something bad"))
+
+	calc := calculator.NewPullRequestCalculator()
+
+	result, err := PullRequest(userRepo, prRepo, prQuery, calc)
+
+	expectedResult := PullRequestCommandResult{
+		User:  ghUser,
+		Query: repository.PullRequestQuery{Author: tester},
+	}
+
+	require.Error(t, err)
+	assert.EqualError(t, err, "failed getting PR info: something bad")
+	assert.Equal(t, expectedResult, result)
+}

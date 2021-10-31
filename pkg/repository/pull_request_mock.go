@@ -13,5 +13,10 @@ type PullRequestRepoMock struct {
 func (m *PullRequestRepoMock) GetPullRequests(q PullRequestQuery) ([]PullRequests, error) {
 	args := m.Called(q)
 
-	return args.Get(0).([]PullRequests), args.Error(1)
+	err := args.Error(1)
+	if err != nil {
+		return nil, err
+	}
+
+	return args.Get(0).([]PullRequests), err
 }
